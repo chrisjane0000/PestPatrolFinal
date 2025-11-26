@@ -13,14 +13,14 @@ torchaudio==2.9.1
 --extra-index-url https://download.pytorch.org/whl/cpu
 
 # --- YOLO / Ultralytics ---
-ultralytics==8.3.23
+ultralytics==8.3.232
 
 # --- Computer Vision ---
 opencv-python-headless==4.8.1.78
 
 # --- Data Processing ---
-numpy==1.26.4
-pandas==2.2.2
+numpy==2.2.4
+pandas==2.3.3
 
 # --- Utilities ---
 python-dotenv==1.0.1
