@@ -1,25 +1,22 @@
-# --- Web Frameworks ---
-Flask==3.1.1
+# --- Web Framework ---
 fastapi==0.110.2
 uvicorn==0.29.0
 
 # --- Supabase ---
 supabase==2.4.0
-postgrest==0.15.0
-gotrue==2.5.0
-realtime==1.0.0
-storage3==0.7.0
 
-# --- Machine Learning / Deep Learning ---
-torch==2.9.1       # CPU-only build (Render-compatible)
-torchvision==0.24.1
-torchaudio==2.9.1
+# --- PyTorch (CPU Wheels Compatible with Render Linux) ---
+torch==2.2.2+cpu
+torchvision==0.17.2+cpu
+torchaudio==2.2.2+cpu
+# Installing via wheels
+--extra-index-url https://download.pytorch.org/whl/cpu
 
 # --- YOLO / Ultralytics ---
 ultralytics==8.3.23
 
 # --- Computer Vision ---
-opencv-python==4.9.0.80
+opencv-python-headless==4.8.1.78
 
 # --- Data Processing ---
 numpy==1.26.4
