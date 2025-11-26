@@ -11,9 +11,9 @@ realtime==1.0.0
 storage3==0.7.0
 
 # --- Machine Learning / Deep Learning ---
-torch==2.2.2        # CPU-only build (Render-compatible)
-torchvision==0.17.2
-torchaudio==2.2.2
+torch==2.9.1       # CPU-only build (Render-compatible)
+torchvision==0.24.1
+torchaudio==2.9.1
 
 # --- YOLO / Ultralytics ---
 ultralytics==8.3.23
