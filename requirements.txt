@@ -6,9 +6,9 @@ uvicorn==0.29.0
 supabase==2.4.0
 
 # --- PyTorch (CPU Wheels Compatible with Render Linux) ---
-torch==2.2.2+cpu
-torchvision==0.17.2+cpu
-torchaudio==2.2.2+cpu
+torch==2.9.1
+torchvision==0.24.1
+torchaudio==2.9.1
 # Installing via wheels
 --extra-index-url https://download.pytorch.org/whl/cpu
 
