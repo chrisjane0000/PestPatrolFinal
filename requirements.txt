@@ -3,8 +3,15 @@ Flask==3.1.1
 fastapi==0.110.2
 uvicorn==0.29.0
 
+# --- Supabase ---
+supabase==2.4.0
+postgrest==0.15.0
+gotrue==2.5.0
+realtime==1.0.0
+storage3==0.7.0
+
 # --- Machine Learning / Deep Learning ---
-torch==2.2.2
+torch==2.2.2        # CPU-only build (Render-compatible)
 torchvision==0.17.2
 torchaudio==2.2.2
 
