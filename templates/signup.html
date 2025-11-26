@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pest Patrol - Signup</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: url("{{ url_for('static', filename='images/pest patrol wireframe (1).jpg') }}") no-repeat center center fixed;
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: white;
+    }
+
+    .header {
+      background-color: #8ed14b;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      color: #000;
+    }
+
+    .signup-container {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .signup-form {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 300px;
+    }
+
+    .signup-form input {
+      padding: 15px;
+      border: none;
+      border-radius: 25px;
+      background-color: #8ed14b;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .signup-form input::placeholder {
+      color: #000;
+    }
+
+    button[type="submit"] {
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      background-color: #4a9c0f;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #3b7c0c;
+    }
+
+    .login-text {
+      text-align: center;
+      font-size: 0.95em;
+    }
+
+    .login-link {
+      color: #8ed14b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Pest Patrol Logo" class="logo" />
+    <h1>Pest Patrol</h1>
+  </div>
+
+  <div class="signup-container">
+    <form class="signup-form" id="signupForm">
+      <input id="fullname" type="text" placeholder="Fullname" required />
+      <input id="email" type="email" placeholder="Enter your Email" required />
+      <input id="password" type="password" placeholder="Enter your password" required />
+      <input id="confirm" type="password" placeholder="Confirm password" required />
+
+      <button type="submit">Sign up</button>
+
+      <p class="login-text">
+        Already have an account? <a href="{{ url_for('index') }}" class="login-link">Log in</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+  // Initialize Supabase client
+  const SUPABASE_URL = "https://ahjlcrpzrxgvkjtcwaua.supabase.co";
+  const SUPABASE_KEY =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoamxjcnB6cnhndmtqdGN3YXVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTUwMTcsImV4cCI6MjA3NTI5MTAxN30.tpt7EU7l-Fd5I1IQqfv9e0_2hKaQKOnbasDMjf9hrh8";
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  document.getElementById("signupForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const fullname = document.getElementById("fullname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const confirm = document.getElementById("confirm").value.trim();
+
+    if (password !== confirm) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      // Step 1: Create user in Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { fullname } },
+      });
+
+      if (authError) throw authError;
+
+      const user = authData.user;
+      if (!user) throw new Error("User not returned from Supabase.");
+
+      // ✅ Step 2: Insert new user into 'users' table
+      const { error: insertError } = await supabase
+        .from("users")
+        .insert([
+          {
+            auth_id: user.id,
+            fullname: fullname,
+            email: email,
+          },
+        ]);
+
+      if (insertError) throw insertError;
+
+      alert("Signup successful! Confirm Email...");
+      window.location.href = "{{ url_for('index') }}";
+    } catch (err) {
+      alert("Signup failed: " + err.message);
+    }
+  });
+</script>
+
+</body>
+</html>

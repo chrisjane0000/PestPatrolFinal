@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pest Patrol - Home</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      
+    }
+
+    html, body {
+  height: 100%;          /* full page height */
+  min-height: 100vh;     /* ensures at least viewport height */
+  margin: 0;
+  padding: 0;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: url("{{ url_for('static', filename='images/pest patrol wireframe (1).jpg') }}") no-repeat center center fixed;
+  background-size: cover;       /* cover entire area */
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  /* remove height:100vh so content can grow */
+}
+
+
+    header {
+      background-color: #8ed14b;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 30px;
+      position: relative;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo img {
+      height: 50px;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    /* Header nav links */
+  nav a {
+    color: black;               /* font color black */
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: bold;
+  }
+
+  nav a:hover {
+    color: #4a9c0f;            /* keep hover green */
+  }
+
+
+    .profile-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ccc url('https://img.icons8.com/ios-filled/50/user.png') center center no-repeat;
+      background-size: 60%;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      display: none;
+      flex-direction: column;
+      min-width: 120px;
+      z-index: 100;
+    }
+
+    .dropdown a {
+      color: black;
+      padding: 10px;
+      text-decoration: none;
+      border-bottom: 1px solid #eee;
+      transition: background 0.3s;
+    }
+
+    .dropdown a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown a:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* ==================== HERO SECTION ==================== */
+.hero {
+min-height: calc(100vh - 80px);  /* ensure full viewport minus header */  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 20px;
+  background-color: rgba(0, 0, 0, 0.4); /* dark overlay */
+}
+
+.hero h1 {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  color: #fff;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+}
+
+/* Learn More button */
+.hero .learn-btn {
+  background: linear-gradient(to right, #4CAF50, #8ed14b);
+  border: none;
+  border-radius: 30px;
+  color: white;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hero .learn-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* taller and softer shadow */
+}
+
+
+
+    /* ==================== LEARN MORE SECTION (AESTHETIC) ==================== */
+.learn-more-content {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  height: 100%;
+  width: 350px;
+  background-color: #4CAF50; /* green panel */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* push Back button to bottom */
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px 0 0 10px;
+  overflow-y: auto;
+  transition: right 0.5s ease;
+  z-index: 200;
+  background: linear-gradient(
+    rgba(142, 209, 75, 0.9),  /* light green with opacity */
+    rgba(76, 175, 80, 0.9)    /* darker green with opacity */
+  );
+  backdrop-filter: blur(8px); /* optional frosted look */
+  
+}
+
+.learn-more-content h2 {
+  font-size: 2em;
+  margin-bottom: 20px;
+}
+
+.manual-content {
+  flex: 1; /* take remaining vertical space */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* top-align content, scrollable if long */
+  gap: 15px;
+  width: 100%;
+}
+
+.learn-more-content h3 {
+  margin-top: 20px;
+  font-size: 1.5em;
+  text-decoration: underline;
+}
+
+.learn-more-content p {
+  margin: 0;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.learn-more-content .back-btn {
+  margin-top: 20px;
+  background: #fff;
+  color: #4CAF50;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 25px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.learn-more-content.show {
+  right: 0; 
+  padding: 20px 25px;
+}
+
+/* Smooth fade-in for paragraphs */
+.learn-more-content.show p {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+
+    
+    /* Responsive adjustments */
+  /* --- Tablet / small screens --- */
+/* ==================== HEADER RESPONSIVE (≤768px) ==================== */
+@media (max-width: 768px) {
+  header {
+    color: #000;
+    display: flex;
+    flex-direction: row;         /* logo + nav + profile inline */
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 15px;
+    width: 100%;
+   
+  }
+
+  .logo img {
+    height: 40px;
+    flex-shrink: 0;             /* prevent shrinking */
+  }
+
+  nav {
+    display: flex;
+    flex-direction: row;         /* links in one row */
+    gap: 12px;
+    flex: 1;                     /* take remaining space */
+    justify-content: center;
+    overflow-x: auto;            /* scroll if too many links */
+    white-space: nowrap;         /* prevent wrapping */
+  }
+
+  nav a {
+    font-size: 14px;             /* fixed font size */
+    flex-shrink: 0;              /* prevent shrinking */
+    text-align: center;
+  }
+
+  .profile-container {
+    flex-shrink: 0;              /* profile stays at right */
+  }
+
+  .profile-icon {
+    width: 36px;
+    height: 36px;
+  }
+  .hero {
+    min-height: calc(100vh - 70px); /* slightly smaller for tablet header */
+    padding: 0 15px;
+  }
+
+  .hero h1 {
+    font-size: 2em;
+    margin-bottom: 25px;
+  }
+
+  .hero .learn-btn {
+    padding: 12px 25px;
+    font-size: 1em;
+  }
+  
+  .learn-more-content {
+    width: 90%;
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  .learn-more-content h2 {
+    font-size: 1.8em;
+  }
+
+  .learn-more-content h3 {
+    font-size: 1.3em;
+  }
+
+  .learn-more-content .back-btn {
+    padding: 8px 20px;
+    font-size: 0.95em;
+  }
+}
+
+/* ==================== MOBILE PHONES (≤480px) ==================== */
+@media (max-width: 480px) {
+  .logo img {
+    height: 35px;
+  }
+
+  nav a {
+    font-size: 14px;             /* keep 14px even on small phones */
+    padding: 0 5px;
+  }
+
+  .profile-icon {
+    width: 32px;
+    height: 32px;
+  }
+  .hero {
+    min-height: calc(100vh - 70px); /* mobile header smaller */
+   
+  }
+
+  .hero h1 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+
+  .hero .learn-btn {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+  .learn-more-content {
+    width: 95%;
+    padding: 12px;
+    margin-bottom: 80px;
+    margin-top: 10px;
+    margin-left: 100%;
+    border-radius: 6px;
+  }
+
+  .learn-more-content h2 {
+    font-size: 1.5em;
+  }
+
+  .learn-more-content h3 {
+    font-size: 1.1em;
+  }
+
+  .learn-more-content p {
+    font-size: 0.95em;
+  }
+
+  .learn-more-content .back-btn {
+    padding: 8px 18px;
+    font-size: 0.9em;
+  }
+}
+
+/* Learn More button */
+.hero .learn-btn {
+  background: linear-gradient(to right, #4CAF50, #8ed14b);
+  border: none;
+  border-radius: 30px;
+  color: white;
+  padding: 15px 30px;
+  font-size: 1.2em;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hero .learn-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+}
+
+
+  
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+  </div>
+
+    <!-- NAV LINKS – SHOULD BE BETWEEN -->
+  <nav class="nav">
+    <a href="{{ url_for('home') }}">HOME</a>
+    <a href="{{ url_for('about') }}">ABOUT</a>
+    <a href="{{ url_for('features') }}">FEATURE</a>
+    <a href="{{ url_for('detected') }}">DETECTED PEST</a>
+  </nav>
+
+    <div class="profile-container" onclick="toggleDropdown()">
+      <div class="profile-icon" id="profileImage"></div>
+      <div class="dropdown" id="profileDropdown">
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('index') }}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>"Smart. Sustainable. Automated Pest Control."</h1>
+    <button class="learn-btn" onclick="toggleLearnMore()">Learn More</button>
+  </section>
+
+  <!-- LEARN MORE PANEL -->
+<!-- LEARN MORE PANEL -->
+<div id="learnMore" class="learn-more-content">
+  <h2>Welcome</h2>
+
+  <div class="manual-content">
+    <p>Pest Patrol is designed to protect crops with IoT-powered detection,
+       solar energy for sustainability, and eco-friendly organic repellents.
+       It automatically monitors fields, repels pests, and ensures higher yields
+       while reducing the use of harmful chemicals.</p>
+
+    <p>Using smart sensors and data analytics, Pest Patrol identifies pest activity early,
+       minimizing crop loss and maximizing farmer efficiency.</p>
+
+    <p>The system integrates seamlessly with solar-powered automation for
+       year-round, self-sustaining operation in rural environments.</p>
+
+    <!-- NEW USER MANUAL CONTENT -->
+    <h3>User Manual</h3>
+    <p>1. Power on the system and ensure the solar panels are unobstructed.</p>
+    <p>2. Connect the IoT sensors to your network via the mobile app.</p>
+    <p>3. Monitor detected pests in real-time through the dashboard.</p>
+    <p>4. Activate pest repellent system when needed, either manually or automatically.</p>
+    <p>5. Review reports and historical pest data weekly to optimize crop protection.</p>
+    <p>6. Regularly clean sensors and solar panels for consistent performance.</p>
+  </div>
+
+  <button class="back-btn" onclick="toggleLearnMore()">Back</button>
+</div>
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://ahjlcrpzrxgvkjtcwaua.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoamxjcnB6cnhndmtqdGN3YXVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTUwMTcsImV4cCI6MjA3NTI5MTAxN30.tpt7EU7l-Fd5I1IQqfv9e0_2hKaQKOnbasDMjf9hrh8";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Dropdown toggle
+    function toggleDropdown() {
+      const dropdown = document.getElementById('profileDropdown');
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Hide dropdown when clicking outside
+    window.addEventListener('click', (e) => {
+      const container = document.querySelector('.profile-container');
+      const dropdown = document.getElementById('profileDropdown');
+      if (!container.contains(e.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
+    // Learn More section toggle
+    // Learn More section toggle (Right-side panel)
+function toggleLearnMore() {
+  const learnMore = document.getElementById('learnMore');
+  learnMore.classList.toggle('show'); // adds/removes "show" class
+}
+
+
+
+    // Load profile image from Supabase
+    async function loadProfileImage() {
+      try {
+        const { data: { user }, error: userErr } = await supabaseClient.auth.getUser();
+        if (userErr || !user) return;
+
+        const { data, error: fetchError } = await supabaseClient
+          .from("users")
+          .select("image_url")
+          .eq("auth_id", user.id)
+          .single();
+
+        if (fetchError) {
+          console.error("Error loading profile image:", fetchError);
+          return;
+        }
+
+        const profileDiv = document.getElementById("profileImage");
+        if (!profileDiv) return;
+
+        if (data?.image_url) {
+          profileDiv.style.backgroundImage = `url('${data.image_url}')`;
+          profileDiv.style.backgroundSize = "cover";
+          profileDiv.style.backgroundPosition = "center";
+          profileDiv.style.backgroundRepeat = "no-repeat";
+        }
+      } catch (err) {
+        console.error("Unexpected error loading profile image:", err);
+      }
+    }
+
+    // Run when page loads
+    loadProfileImage();
+    // Dropdown toggle
+function toggleDropdown() {
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+}
+window.addEventListener('click', (e) => {
+  const container = document.querySelector('.profile-container');
+  const dropdown = document.getElementById('profileDropdown');
+  if (!container.contains(e.target)) dropdown.style.display = 'none';
+});
+
+// Learn More toggle
+function toggleLearnMore() {
+  document.getElementById('learnMore').classList.toggle('show');
+}
+
+
+  </script>
+</body>
+</html>

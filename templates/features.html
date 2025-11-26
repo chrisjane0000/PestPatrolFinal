@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pest Patrol</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+    body {
+  background: url("{{ url_for('static', filename='images/pest patrol wireframe (1).jpg') }}") no-repeat center center fixed;
+  background-size: cover;       /* cover entire area */
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  /* remove height:100vh so content can grow */
+}
+
+
+    /* ==================== NAVBAR – PERFECT SA TANANG DEVICE ==================== */
+    .main-header {
+      background: #8ed14b;
+      padding: 16px 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.nav-links {
+  flex: 1;
+  display: flex;
+  justify-content: center; /* CENTER BETWEEN LOGO & PROFILE */
+  gap: 22px;
+}
+
+
+    .logo img {
+      height: 52px;
+      width: auto;
+    }
+
+    
+    .nav-links a {
+      color: #000;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover { color: white; }
+
+    .profile-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: #eee url('https://img.icons8.com/ios-filled/50/user.png') center/65% no-repeat;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 58px;
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      min-width: 140px;
+      z-index: 999;
+    }
+
+    .dropdown a {
+      padding: 12px 16px;
+      color: #333;
+      text-decoration: none;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown a:last-child { border-bottom: none; }
+    .dropdown a:hover { background: #f0f0f0; }
+
+    /* ==================== CONTENT ==================== */
+    .container {
+      padding: 60px 20px;
+      text-align: center;
+      background: rgba(0,0,0,0.55);
+      margin: 40px auto;
+      border-radius: 18px;
+      max-width: 1200px;
+      backdrop-filter: blur(6px);
+      color: #ffff;
+    }
+
+    .container h2 {
+      font-size: 2.2rem;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+    }
+
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .step {
+      width: 290px;
+      background: rgba(255,255,255,0.12);
+      padding: 30px 20px;
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+      transition: 0.3s;
+    }
+
+    .step:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    }
+
+    .step img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 3px solid white;
+      background: white;
+      padding: 12px;
+      margin-bottom: 15px;
+    }
+
+    .step h3 {
+      color: #FFD700;
+      font-size: 1.4rem;
+      margin: 10px 0;
+    }
+
+    /* ==================== PEST TABLE → CARDS SA MOBILE ==================== */
+    .pest-table-container {
+      max-width: 900px;
+      margin: 60px auto;
+      background: rgba(255,255,255,0.97);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      color: #333;
+    }
+
+    .pest-table-container h3 {
+      text-align: center;
+      color: #2d4a1f;
+      font-size: 1.8rem;
+      margin-bottom: 25px;
+      font-weight: bold;
+    }
+
+    /* Desktop Table */
+    .pest-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .pest-table th {
+      background: #dff0c8;
+      padding: 15px;
+      text-align: center;
+      font-weight: bold;
+      color: #2d4a1f;
+    }
+
+    .pest-table td {
+      padding: 15px;
+      text-align: center;
+      background: #f6ffef;
+      border-bottom: 1px solid #cce0b3;
+    }
+
+    .pest-table img {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    /* ==================== MOBILE RESPONSIVE (≤768px) ==================== */
+    @media (max-width: 768px) {
+      .main-header {
+        padding: 14px 20px;
+        flex-direction: column;
+      }
+
+      .header-top {
+    display: flex;
+    flex-direction: row;       /* KEEP IN 1 LINE */
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+    overflow-x: auto;          /* Prevent breaking */
+    white-space: nowrap;       /* Prevent wrapping */
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+    white-space: nowrap;       /* Force 1 line */
+    flex: 1;
+    justify-content: center;
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .logo img {
+    height: 40px;
+    flex-shrink: 0;
+  }
+
+  .profile-container {
+    flex-shrink: 0;
+  }
+
+  .profile-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+.nav-links a {
+  font-size: 14px;
+}
+
+
+
+      /* Hide table, show cards */
+      .pest-table { display: none; }
+      .pest-cards { display: flex !important; flex-direction: column; gap: 20px; }
+
+      .pest-card {
+        background: #f6ffef;
+        border: 2px solid #cce0b3;
+        border-radius: 16px;
+        padding: 20px;
+        display: grid;
+        grid-template-columns: 90px 1fr;
+        gap: 16px;
+        align-items: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      }
+
+      .pest-card img {
+        width: 85px;
+        height: 85px;
+        border-radius: 12px;
+        object-fit: cover;
+      }
+
+      .pest-info h4 {
+        color: #2d4a1f;
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .pest-info .sci {
+        font-style: italic;
+        color: #555;
+        font-size: 0.95rem;
+        margin: 4px 0 10px;
+      }
+
+      .pest-info .details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .pest-info .details span {
+        background: #dff0c8;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- RESPONSIVE NAVBAR -->
+  <header class="main-header">
+    <div class="header-top">
+      <div class="header-top">
+  <div class="logo">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo">
+  </div>
+
+  <!-- NAV LINKS – SHOULD BE BETWEEN -->
+  <nav class="nav-links">
+    <a href="{{ url_for('home') }}">HOME</a>
+    <a href="{{ url_for('about') }}">ABOUT</a>
+    <a href="{{ url_for('features') }}">FEATURE</a>
+    <a href="{{ url_for('detected') }}">DETECTED PEST</a>
+  </nav>
+
+  <!-- PROFILE (icon + dropdown) -->
+  <div class="profile-container" onclick="toggleDropdown(event)">
+    <div class="profile-icon" id="profileImage"></div>
+    <div class="dropdown" id="profileDropdown">
+      <a href="{{ url_for('profile') }}">Profile</a>
+      <a href="{{ url_for('index') }}">Logout</a>
+    </div>
+  </div>
+</div>
+
+
+    
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h2>Pest Patrol utilizes an intelligent and automated process to detect, analyze, and respond to pest activity in the field...</h2>
+    <div class="steps">
+      <div class="step">
+        <img src="https://cdn-icons-png.flaticon.com/512/1029/1029183.png" alt="Detect">
+        <h3>Detect</h3>
+        <p>Smart sensors and cameras monitor the field in real-time...</p>
+      </div>
+      <div class="step">
+        <img src="https://cdn-icons-png.flaticon.com/512/3524/3524659.png" alt="Analyze">
+        <h3>Analyze</h3>
+        <p>Collected data is processed using machine learning...</p>
+      </div>
+      <div class="step">
+        <img src="https://cdn-icons-png.flaticon.com/512/3208/3208726.png" alt="Respond">
+        <h3>Respond</h3>
+        <p>Based on the analysis, the system activates...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PEST TABLE + MOBILE CARDS -->
+  <div class="pest-table-container">
+    <h3>PestPatrol Available Pests</h3>
+
+    <!-- Desktop Table -->
+    <table class="pest-table">
+      <tr><th>Pest</th><th>Species</th><th>Attack Time</th><th>Damage</th></tr>
+      <tr>
+        <td><img src="{{ url_for('static', filename='images/fall-armyworm-1.webp') }}" alt="Fall Armyworm"></td>
+        <td><div class="species-name">Fall Armyworm</div><div class="species-sub"><i>Spodoptera frugiperda</i></div></td>
+        <td>Nocturnal</td>
+        <td><b style="color:#d32f2f">High</b></td>
+      </tr>
+      <tr>
+        <td><img src="{{ url_for('static', filename='images/cornborer.jpg') }}" alt="Asian Corn Borer"></td>
+        <td><div class="species-name">Asian Corn Borer</div><div class="species-sub"><i>Ostrinia furnacalis</i></div></td>
+        <td>Nocturnal</td>
+        <td><b style="color:#d32f2f">High</b></td>
+      </tr>
+      <tr>
+        <td><img src="{{ url_for('static', filename='images/rodent.jpg') }}" alt="Rodent"></td>
+        <td><div class="species-name">Rodent</div><div class="species-sub"><i>Mammalia</i></div></td>
+        <td>Both</td>
+        <td><b style="color:#f57c00">Medium</b></td>
+      </tr>
+    </table>
+
+    <!-- Mobile Cards (hidden sa desktop) -->
+    <div class="pest-cards" style="display:none;">
+      <div class="pest-card">
+        <img src="{{ url_for('static', filename='images/fall-armyworm-1.webp') }}" alt="Fall Armyworm">
+        <div class="pest-info">
+          <h4>Fall Armyworm</h4>
+          <div class="sci">Spodoptera frugiperda</div>
+          <div class="details">
+            <span>Nocturnal</span>
+            <span style="color:#d32f2f"><b>High Damage</b></span>
+          </div>
+        </div>
+      </div>
+      <div class="pest-card">
+        <img src="{{ url_for('static', filename='images/cornborer.jpg') }}" alt="Asian Corn Borer">
+        <div class="pest-info">
+          <h4>Asian Corn Borer</h4>
+          <div class="sci">Ostrinia furnacalis</div>
+          <div class="details">
+            <span>Nocturnal</span>
+            <span style="color:#d32f2f"><b>High Damage</b></span>
+          </div>
+        </div>
+      </div>
+      <div class="pest-card">
+        <img src="{{ url_for('static', filename='images/rodent.jpg') }}" alt="Rodent">
+        <div class="pest-info">
+          <h4>Rodent</h4>
+          <div class="sci">Mammalia</div>
+          <div class="details">
+            <span>Both Day & Night</span>
+            <span style="color:#f57c00"><b>Medium Damage</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase Script (same ra) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const supabaseClient = supabase.createClient(
+      "https://ahjlcrpzrxgvkjtcwaua.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoamxjcnB6cnhndmtqdGN3YXVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTUwMTcsImV4cCI6MjA3NTI5MTAxN30.tpt7EU7l-Fd5I1IQqfv9e0_2hKaQKOnbasDMjf9hrh8"
+    );
+
+    function toggleDropdown(e) {
+      e.stopPropagation();
+      const dropdown = document.getElementById('profileDropdown');
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    window.addEventListener('click', (e) => {
+      if (!e.target.closest('.profile-container')) {
+        document.getElementById('profileDropdown').style.display = 'none';
+      }
+    });
+
+    // Load profile image
+    async function loadProfileImage() {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (!user) return;
+      const { data } = await supabaseClient.from("users").select("image_url").eq("auth_id", user.id).single();
+      if (data?.image_url) {
+        document.getElementById("profileImage").style.backgroundImage = `url('${data.image_url}')`;
+        document.getElementById("profileImage").style.backgroundSize = "cover";
+      }
+    }
+    loadProfileImage();
+  </script>
+</body>
+</html>

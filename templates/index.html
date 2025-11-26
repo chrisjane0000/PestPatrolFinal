@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pest Patrol Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: url("{{ url_for('static', filename='images/pest patrol wireframe (1).jpg') }}")  no-repeat center center fixed;
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background-color: #8ed14b;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      height: 50px;
+    }
+
+    .header h1 {
+      font-size: 2em;
+      color: #000;
+    }
+
+    .login-container {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-form {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 30px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 300px;
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      padding: 15px;
+      border: none;
+      border-radius: 25px;
+      background-color: #8ed14b;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .login-form input::placeholder {
+      color: #000;
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9em;
+    }
+
+    .options label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .forgot-password {
+      color: white;
+      text-decoration: none;
+    }
+
+    button[type="submit"] {
+      padding: 12px;
+      border: none;
+      border-radius: 25px;
+      background-color: #4a9c0f;
+      color: white;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #3b7c0c;
+    }
+
+    .signup-text {
+      text-align: center;
+      font-size: 0.95em;
+    }
+
+    .signup-link {
+      color: #8ed14b;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Pest Patrol Logo" class="logo" />
+    <h1>Pest Patrol</h1>
+  </div>
+
+  <div class="login-container">
+    <form class="login-form" id="loginForm">
+      <input id="email" type="text" placeholder="Enter your Email" required />
+      <input id="password" type="password" placeholder="Enter your password" required />
+
+  
+
+      <button type="submit">Login</button>
+
+      <p class="signup-text">
+        Don’t have an account?
+        <a href="{{ url_for('signup') }}" class="signup-link">Sign up</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    const SUPABASE_URL = "https://ahjlcrpzrxgvkjtcwaua.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoamxjcnB6cnhndmtqdGN3YXVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTUwMTcsImV4cCI6MjA3NTI5MTAxN30.tpt7EU7l-Fd5I1IQqfv9e0_2hKaQKOnbasDMjf9hrh8";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!email || !password) {
+        alert("❌ Please enter both email and password.");
+        return;
+      }
+
+      try {
+        // ✅ Attempt to sign in
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        // ✅ Handle errors clearly
+        if (error) {
+          console.error("Login error:", error);
+          if (error.message.includes("Email not confirmed")) {
+            alert("❌ Your email is not confirmed. Please check your inbox and verify.");
+          } else {
+            alert("❌ Login failed: " + error.message);
+          }
+          return;
+        }
+
+        // ✅ Check if session exists
+        if (!data.session) {
+          alert("❌ Login failed: No active session created. Please try again.");
+          return;
+        }
+
+        console.log("✅ Login successful:", data);
+        alert("✅ Login successful! Redirecting...");
+        window.location.href = "{{ url_for('home') }}";
+
+      } catch (err) {
+        console.error("Unexpected error:", err);
+        alert("❌ Unexpected error: " + err.message);
+      }
+    });
+  </script>
+</body>
+</html>

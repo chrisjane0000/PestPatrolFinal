@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pest Patrol - About</title>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+      
+    }
+
+    html, body {
+  height: 100%;          /* ensure html covers full height */
+  min-height: 100vh;     /* ensure body covers at least full viewport */
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to bottom, #d7eac6, #8ed14b); /* Green gradient background */
+  color: black;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+
+    /* Navbar */
+    header {
+      background-color: #8ed14b; /* Dark green navbar */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 30px;
+      position: relative;
+    }
+
+    .logo img {
+      height: 50px;
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: black;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: white;
+    }
+
+    .profile-container {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #ccc url('https://img.icons8.com/ios-filled/50/user.png') center center no-repeat;
+      background-size: 60%;
+    }
+
+    .dropdown {
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      display: none;
+      flex-direction: column;
+      min-width: 120px;
+      z-index: 100;
+    }
+
+    .dropdown a {
+      color: black;
+      padding: 10px;
+      text-decoration: none;
+      border-bottom: 1px solid #eee;
+      transition: background 0.3s;
+    }
+
+    .dropdown a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown a:hover {
+      background-color: #f0f0f0;
+    }
+
+    /* About Section */
+    .about-section {
+  text-align: center;
+  padding: 60px 20px;
+  position: relative;
+}
+
+.about-section h2 {
+  margin-bottom: 15px;
+  font-size: 2em;
+}
+
+.about-section p {
+  font-size: 1.1em; /* slightly smaller than 25px for better spacing */
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 15px auto; /* space between paragraphs */
+}
+
+
+    /* Corn Images */
+    .corn-left, .corn-right {
+      width: 100px;
+      animation: bounce 2.5s infinite ease-in-out;
+    }
+
+    .corn-left {
+      position: absolute;
+      top: 50px;
+      left: 40px;
+      width: 180px;
+      height: auto;  
+    }
+
+    .corn-right {
+      position: absolute;
+      bottom: 20px;
+      right: 30px;
+      width: 220px;
+    }
+
+ /* Contact Section - fixed bottom left */
+.contact {
+  bottom: 10px;           /* distance from bottom */
+  left: 10px;             /* distance from left */
+  font-size: 14px;        /* readable size */
+  font-weight: bold;
+  display: flex;
+  align-items: center;    /* vertically center icon and text */
+  gap: 8px;               /* space between icon and email */
+  padding: 5px 10px;      /* some padding around content */
+  border-radius: 8px;     /* rounded corners */
+  z-index: 999;           /* stay on top of other elements */
+}
+
+.gmail-icon {
+  width: 20px;
+  height: 20px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+    
+
+    /* Bounce animation */
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    /* Mobile Responsive (≤480px) */
+
+@media (max-width: 780px) {
+  header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    flex-wrap: nowrap;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+
+  nav {
+    flex-direction: row;
+    gap: 8px;
+    font-size: 0.9em;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  nav a {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 0 5px;
+  }
+
+  .profile-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .about-section {
+    padding: 40px 15px;
+  }
+
+  .about-section h2 {
+    font-size: 1.5em;
+  }
+
+  .about-section p {
+    font-size: 0.95em;
+  }
+
+  /* Corn Images for mobile */
+  .corn-left {
+    display: block;           /* make visible */
+    width: 80px;              /* smaller size */
+    top: 5px;                 /* move above main text */
+    left: 5px;
+    position: absolute;
+    animation: bounce 2.5s infinite ease-in-out;
+    z-index: 0;               /* behind text */
+  }
+
+  .corn-right {
+    display: block;           
+    width: 90px;
+  height: 100px;
+    bottom: 5px;              /* move below main text */
+    right: 5px;
+    position: absolute;
+    animation: bounce 2.5s infinite ease-in-out;
+    z-index: 0;
+  }
+
+  .contact {
+    font-size: 0.8em;
+    flex-direction: column;
+    
+    
+  }
+}
+
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <header>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Pest Patrol Logo" />
+    </div>
+    <nav>
+      <a href="{{ url_for('home') }}">HOME</a>
+      <a href="{{ url_for('about') }}">ABOUT</a>
+      <a href="{{ url_for('features') }}">FEATURE</a>
+      <a href="{{ url_for('detected') }}">DETECTED PEST</a>
+    </nav>
+    <div class="profile-container" onclick="toggleDropdown()">
+      <div class="profile-icon" id="profileImage"></div>
+      <div class="dropdown" id="profileDropdown">
+        <a href="{{ url_for('profile') }}">Profile</a>
+        <a href="{{ url_for('index') }}">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <div class="about-section">
+  <img src="{{ url_for('static', filename='images/corn-left.jpg') }}" alt="Corn Left" class="corn-left">
+    <h2>Pest Patrol</h2>
+    <p>
+  Pest Patrol is a multifunctional pest management system powered by IoT, solar energy, 
+  and organic solutions to provide eco-friendly and automated control of pests in crop fields. 
+  The system aims to reduce crop damage, increase productivity, and support sustainable farming practices.
+</p>
+
+<p>
+  Our platform combines real-time pest detection, automated pest control mechanisms, 
+  and data analytics to give farmers a comprehensive overview of their crop health. 
+  Pest Patrol is designed to be user-friendly, energy-efficient, and adaptable to various farm sizes.
+</p>
+
+<p>
+  <strong>Developers:</strong><br>
+  Maserin, James David<br>
+  Plazos, Jade Mariel<br>
+  Sarsoza, Kristal Angeline<br>
+  Tacang, Reiven<br>
+  Yburan, Christine Jane
+</p>
+
+<p>
+  We are committed to integrating technology with agriculture to promote sustainable practices, 
+  minimize chemical use, and empower farmers with modern tools for pest management.
+</p>
+
+    <div class="contact">
+      <p>
+        <img src="{{ url_for('static', filename='images/gmail.png') }}" class="gmail-icon">
+        pestpatroltransfarmers@gmail.com
+      </p>
+    </div>
+
+  <img src="{{ url_for('static', filename='images/corn-left.jpg') }}" alt="Corn Right" class="corn-right">
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      const dropdown = document.getElementById('profileDropdown');
+      dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    window.addEventListener('click', function(e) {
+      const container = document.querySelector('.profile-container');
+      if (!container.contains(e.target)) {
+        document.getElementById('profileDropdown').style.display = 'none';
+      }
+    });
+  </script>
+
+  <!-- ✅ Added Supabase Profile Image Integration -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = "https://ahjlcrpzrxgvkjtcwaua.supabase.co";
+    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoamxjcnB6cnhndmtqdGN3YXVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTUwMTcsImV4cCI6MjA3NTI5MTAxN30.tpt7EU7l-Fd5I1IQqfv9e0_2hKaQKOnbasDMjf9hrh8";
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadProfileImage() {
+      try {
+        const { data: { user }, error: userErr } = await supabaseClient.auth.getUser();
+        if (userErr || !user) return;
+
+        const { data, error: fetchError } = await supabaseClient
+          .from("users")
+          .select("image_url")
+          .eq("auth_id", user.id)
+          .single();
+
+        if (fetchError) {
+          console.error("Error loading profile image:", fetchError);
+          return;
+        }
+
+        const profileDiv = document.getElementById("profileImage");
+        if (!profileDiv) return;
+
+        if (data?.image_url) {
+          profileDiv.style.backgroundImage = `url('${data.image_url}')`;
+          profileDiv.style.backgroundSize = "cover";
+          profileDiv.style.backgroundPosition = "center";
+          profileDiv.style.backgroundRepeat = "no-repeat";
+        }
+      } catch (err) {
+        console.error("Unexpected error loading profile image:", err);
+      }
+    }
+
+    loadProfileImage();
+  </script>
+</body>
+</html>

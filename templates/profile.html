@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Page</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    body {
+      background-color: #6fb74f;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .profile-card {
+      background-color: #f5f7f8;
+      width: 600px;
+      padding: 30px;
+      border-radius: 15px;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      position: relative;
+    }
+    .profile-image {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 40%;
+      cursor: pointer;
+    }
+    .profile-image img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #ddd;
+      margin-bottom: 10px;
+      object-fit: cover;
+      border: 2px solid #aaa;
+      transition: 0.3s;
+    }
+    .profile-info {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+      font-size: 14px;
+      color: #333;
+    }
+    textarea {
+      height: 70px;
+      resize: none;
+    }
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    .btn {
+      background-color: #a4d037;
+      color: #fff;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 15px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn:hover {
+      background-color: #8bb72a;
+    }
+    .btn.back {
+      background-color: #ccc;
+      color: #333;
+    }
+    .btn.back:hover {
+      background-color: #aaa;
+    }
+    .about-display {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #fff;
+      min-height: 70px;
+      font-size: 14px;
+      color: #333;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 650px) {
+      .profile-card {
+        flex-direction: column;
+        width: 90%;
+        text-align: center;
+      }
+      .profile-info {
+        width: 100%;
+      }
+      .button-row {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+      .btn {
+        width: 100px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="profile-card">
+    <div class="profile-image" id="profileImageContainer">
+      <img id="profileImage" src="https://img.icons8.com/ios-filled/100/808080/user.png" alt="Profile">
+      <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      <p><strong id="displayName">Loading...</strong></p>
+    </div>
+
+    <div class="profile-info">
+      <div>
+        <label>Full Name:</label>
+        <input type="text" id="fullnameField" readonly>
+      </div>
+
+      <div>
+        <label>Email:</label>
+        <input type="email" id="emailField" readonly>
+      </div>
+
+      <div>
+        <label>Date Joined:</label>
+        <input type="text" id="joinedField" readonly>
+      </div>
+
+      <div id="about-section">
+        <label>About Me:</label>
+        <textarea id="aboutInput" placeholder="Write something about yourself..."></textarea>
+        <div id="aboutDisplay" class="about-display" style="display:none;"></div>
+      </div>
+
+      <div class="button-row">
+        <button class="btn back" id="backBtn">Back</button>
+        <button class="btn" id="saveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const SUPABASE_URL = "https://ahjlcrpzrxgvkjtcwaua.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoamxjcnB6cnhndmtqdGN3YXVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk3MTUwMTcsImV4cCI6MjA3NTI5MTAxN30.tpt7EU7l-Fd5I1IQqfv9e0_2hKaQKOnbasDMjf9hrh8";
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  const displayName = document.getElementById("displayName");
+  const fullnameField = document.getElementById("fullnameField");
+  const emailField = document.getElementById("emailField");
+  const joinedField = document.getElementById("joinedField");
+  const profileImage = document.getElementById("profileImage");
+  const fileInput = document.getElementById("fileInput");
+
+  const aboutInput = document.getElementById('aboutInput');
+  const aboutDisplay = document.getElementById('aboutDisplay');
+  const saveBtn = document.getElementById('saveBtn');
+  const backBtn = document.getElementById('backBtn');
+
+  let authId = null;
+
+  async function loadUser() {
+    const { data: { user }, error } = await supabaseClient.auth.getUser();
+    if (error || !user) {
+      alert("No user logged in. Redirecting...");
+      window.location.href = "login.html";
+      return;
+    }
+
+    authId = user.id;
+    const fullName = user.user_metadata?.fullname || "Not Provided";
+    const email = user.email || "Not Available";
+    const joinedDate = new Date(user.created_at).toLocaleDateString();
+
+    displayName.textContent = fullName;
+    fullnameField.value = fullName;
+    emailField.value = email;
+    joinedField.value = joinedDate;
+
+    const { data: profile } = await supabaseClient
+      .from("users")
+      .select("image_url")
+      .eq("auth_id", authId)
+      .single();
+
+    if (profile?.image_url) {
+      profileImage.src = profile.image_url;
+    }
+  }
+
+  document.getElementById("profileImageContainer").addEventListener("click", () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", async (event) => {
+    const file = event.target.files[0];
+    if (!file || !authId) return;
+
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${authId}-${Date.now()}.${fileExt}`;
+    const filePath = `profiles/${fileName}`;
+
+    const { data: uploadData, error: uploadError } = await supabaseClient
+      .storage
+      .from("avatars")
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) {
+      console.error("Storage error:", uploadError);
+      alert("Image upload failed.");
+      return;
+    }
+
+    const { data: publicData, error: publicUrlError } = supabaseClient
+      .storage
+      .from("avatars")
+      .getPublicUrl(filePath);
+
+    if (publicUrlError) {
+      console.error("Public URL error:", publicUrlError);
+      alert("Could not get public image URL.");
+      return;
+    }
+
+    const imageUrl = publicData?.publicUrl;
+
+    const { error: dbError } = await supabaseClient
+      .from("users")
+      .update({ image_url: imageUrl })
+      .eq("auth_id", authId);
+
+    if (dbError) {
+      console.error("Database update error:", dbError);
+      alert("Image URL could not be saved.");
+      return;
+    }
+
+    profileImage.src = imageUrl;
+    alert("✅ Profile image updated successfully!");
+  });
+
+  async function loadAbout() {
+    if (!authId) return;
+
+    const { data, error } = await supabaseClient
+      .from("users")
+      .select("about")
+      .eq("auth_id", authId)
+      .single();
+
+    if (error) {
+      console.error("Error loading about text:", error);
+      return;
+    }
+
+    if (data?.about) {
+      aboutDisplay.textContent = data.about;
+      aboutInput.style.display = 'none';
+      aboutDisplay.style.display = 'block';
+      saveBtn.textContent = 'Edit';
+    } else {
+      aboutDisplay.style.display = 'none';
+      aboutInput.style.display = 'block';
+      saveBtn.textContent = 'Save';
+    }
+  }
+
+  saveBtn.addEventListener('click', async () => {
+    if (saveBtn.textContent === 'Save') {
+      const aboutText = aboutInput.value.trim();
+      if (!aboutText) {
+        alert('Please enter something about yourself.');
+        return;
+      }
+
+      const { data: existingUser, error: checkError } = await supabaseClient
+        .from("users")
+        .select("auth_id")
+        .eq("auth_id", authId)
+        .maybeSingle();
+
+      if (checkError) {
+        console.error("Check user error:", checkError);
+        alert("Database error while checking user.");
+        return;
+      }
+
+      if (!existingUser) {
+        const { error: insertError } = await supabaseClient
+          .from("users")
+          .insert([{ auth_id: authId }]);
+        if (insertError) {
+          console.error("Insert error:", insertError);
+          alert("Could not create user record.");
+          return;
+        }
+      }
+
+      const { error } = await supabaseClient
+        .from("users")
+        .update({ about: aboutText })
+        .eq("auth_id", authId);
+
+      if (error) {
+        console.error("Error saving about text:", error);
+        alert("Failed to save About Me.");
+        return;
+      }
+
+      aboutDisplay.textContent = aboutText;
+      aboutDisplay.style.display = 'block';
+      aboutInput.style.display = 'none';
+      saveBtn.textContent = 'Edit';
+    } else {
+      aboutInput.style.display = 'block';
+      aboutDisplay.style.display = 'none';
+      aboutInput.value = aboutDisplay.textContent;
+      saveBtn.textContent = 'Save';
+    }
+  });
+
+  backBtn.addEventListener('click', () => {
+    window.history.back();
+  });
+
+  // 🔥 Load user info then "About Me"
+  loadUser().then(loadAbout);
+
+  // 🔥 NEW: Send logged user to Flask backend
+  supabaseClient.auth.getSession().then(({ data }) => {
+    if (data?.session) {
+      fetch("/set_user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_id: data.session.user.id,
+          access_token: data.session.access_token
+        })
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
